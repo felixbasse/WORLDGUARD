@@ -1,0 +1,26 @@
+name: Build WorldGuard
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Zip entpacken
+        run: unzip -q *.zip
+      - name: Build
+        run: |
+          cd WorldGuard-7.0.17
+          chmod +x gradlew
+          ./gradlew assemble --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: worldguard-jar
+          path: WorldGuard-7.0.17/worldguard-bukkit/build/libs/*.jar
