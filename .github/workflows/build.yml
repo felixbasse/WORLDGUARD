@@ -13,17 +13,22 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - name: Zip entpacken
+      - name: Offiziellen Quellcode 7.0.17 holen
+        run: git clone --depth 1 --branch 7.0.17 https://github.com/EngineHub/WorldGuard.git wg
+      - name: Safe-Spawn Aenderungen einspielen
         run: |
-          rm -rf WorldGuard-7.0.17
-          unzip -q -o WorldGuard-7.0.17-safespawn-source.zip
-          ls WorldGuard-7.0.17
+          ls -la
+          unzip -q -o WorldGuard-7.0.17-safespawn-source.zip -d tmp
+          ls tmp/WorldGuard-7.0.17
+          cp -r tmp/WorldGuard-7.0.17/worldguard-core/. wg/worldguard-core/
+          cp -r tmp/WorldGuard-7.0.17/worldguard-bukkit/. wg/worldguard-bukkit/
+          ls wg
       - name: Build
         run: |
-          cd WorldGuard-7.0.17
+          cd wg
           chmod +x gradlew
           ./gradlew assemble --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: worldguard-jar
-          path: WorldGuard-7.0.17/worldguard-bukkit/build/libs/*.jar
+          path: wg/worldguard-bukkit/build/libs/*.jar
