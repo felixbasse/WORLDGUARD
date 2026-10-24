@@ -14,7 +14,10 @@ jobs:
           distribution: temurin
           java-version: 21
       - name: Zip entpacken
-        run: unzip -q *.zip
+        run: |
+          rm -rf WorldGuard-7.0.17
+          unzip -q -o WorldGuard-7.0.17-safespawn-source.zip
+          ls WorldGuard-7.0.17
       - name: Build
         run: |
           cd WorldGuard-7.0.17
